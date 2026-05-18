@@ -1,0 +1,11 @@
+larakube
+larakube.config.json
+
+# Editor files
+.DS_Store
+.zed/
+
+# Local agent tooling
+.agents/
+skills-lock.json
+AGENTS.md

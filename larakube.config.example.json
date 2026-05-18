@@ -1,0 +1,15 @@
+{
+  "laravelNamespaces": [
+    "production-web",
+    "production-worker"
+  ],
+  "features": {
+    "horizon": false
+  },
+  "logs": {
+    "source": "stdout",
+    "path": "storage/logs/laravel.log",
+    "tail": 100,
+    "container": ""
+  }
+}
