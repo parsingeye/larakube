@@ -78,6 +78,12 @@ go build -o larakube .
 ./larakube
 ```
 
+### Download a release binary
+
+Prebuilt binaries are published on the GitHub Releases page for tagged versions:
+
+`https://github.com/parsingeye/larakube/releases`
+
 ## Quick Start
 
 ### 1. Create a config interactively
@@ -270,6 +276,30 @@ Format:
 ```bash
 gofmt -w *.go
 ```
+
+## Releases
+
+GitHub releases are built automatically with GitHub Actions when you push a version tag.
+
+Example:
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+That workflow builds archives for:
+
+- macOS amd64
+- macOS arm64
+- Linux amd64
+- Linux arm64
+
+Each release archive includes:
+
+- `larakube`
+- `README.md`
+- `LICENSE`
 
 ## Roadmap
 

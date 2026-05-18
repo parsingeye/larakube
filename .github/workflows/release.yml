@@ -1,0 +1,67 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build And Publish
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - goos: darwin
+            goarch: amd64
+            archive_ext: tar.gz
+          - goos: darwin
+            goarch: arm64
+            archive_ext: tar.gz
+          - goos: linux
+            goarch: amd64
+            archive_ext: tar.gz
+          - goos: linux
+            goarch: arm64
+            archive_ext: tar.gz
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Build binary
+        env:
+          CGO_ENABLED: 0
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+        run: |
+          mkdir -p dist
+          binary_name="larakube"
+          asset_name="larakube_${GOOS}_${GOARCH}"
+          build_dir="dist/${asset_name}"
+          mkdir -p "${build_dir}"
+          go build -trimpath -ldflags='-s -w' -o "${build_dir}/${binary_name}" .
+          cp README.md LICENSE "${build_dir}/"
+          tar -C dist -czf "dist/${asset_name}.tar.gz" "${asset_name}"
+
+      - name: Publish GitHub release if missing
+        if: matrix.goos == 'darwin' && matrix.goarch == 'amd64'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1 || gh release create "${GITHUB_REF_NAME}" --generate-notes
+
+      - name: Upload release asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload "${GITHUB_REF_NAME}" "dist/larakube_${{ matrix.goos }}_${{ matrix.goarch }}.tar.gz" --clobber
