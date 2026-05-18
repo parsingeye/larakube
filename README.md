@@ -301,6 +301,24 @@ Each release archive includes:
 - `README.md`
 - `LICENSE`
 
+## Security And Dependency Updates
+
+The repository is set up with:
+
+- GitHub vulnerability alerts
+- GitHub secret scanning and push protection
+- Dependabot updates for:
+  - Go modules
+  - GitHub Actions
+- CodeQL analysis for Go on:
+  - pushes to `master`
+  - pull requests to `master`
+  - a weekly schedule
+- Gitleaks secret scanning on:
+  - pushes to `master`
+  - pull requests to `master`
+  - a weekly schedule
+
 ## Roadmap
 
 - Container selection for multi-container pods
